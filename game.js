@@ -35,7 +35,7 @@ canvas.Scene.new({
       //ajout du scroll sur la map
       self.scrolling.addScroll({
         element: self.tiledMap, 
-        speed: -3,
+        speed: -5,
         block: true,
         width: 4850,
         height: 154
