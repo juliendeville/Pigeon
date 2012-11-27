@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="3" tilewidth="97" tileheight="77">
+ <tileset firstgid="1" name="murs" tilewidth="97" tileheight="77">
+  <image source="assets/murs.png" trans="ffffff" width="486" height="309"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="50" height="3">
+  <data encoding="base64" compression="zlib">
+   eJydz+sKgCAMBeB1v1pmvf+zdgSFcVoY/fiYbjo2LyIejhRZoFoFNbTQKQ3duW758qb0J9/zfHrWQLvoWg8DzGQ0cn9ZvabCHz0rzx/kuccCKzjYUnQqF+3qnF1GLjoT99LrDfe7AdgeBnU=
+  </data>
+ </layer>
+</map>
