@@ -42,4 +42,13 @@ var initControls = function() {
       self.state.down = false;
     });
 
+
+    //bwaaaa
+    canvas.Input.keyDown([Input.Space], function(e) {
+      self.state.cri = true;
+    });
+    canvas.Input.keyUp(Input.Space, function(e) {
+      self.state.cri = false;
+    });
+
 }
