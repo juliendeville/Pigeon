@@ -2,6 +2,7 @@ var canvas = CE.defines("canvas_id").
 extend(Input).
 extend(Tiled).
 extend(Scrolling).
+extend(Animation).
 ready(function() {
     canvas.Scene.call("MyScene");
 });
@@ -24,69 +25,10 @@ canvas.Scene.new({
   ready: function(stage) {
     var self = this;
 
-    var state = { left: false, right: false, up: false, down: false };
+    this.state = { left: false, right: false, up: false, down: false };
 
-    //droite
-     canvas.Input.keyDown(Input.Right, function(e) {
-        state.right = true;
-        Move();
-     });
-     canvas.Input.keyUp(Input.Right, function(e) {
-        state.right = false;
-        Move();
-     });
-     //gauche
-     canvas.Input.keyDown(Input.Left, function(e) {
-        state.left = true;
-        Move();
-     });
-     canvas.Input.keyUp(Input.Left, function(e) {
-        state.left = false;
-        Move();
-     });
-     //haut
-     canvas.Input.keyDown(Input.Up, function(e) {
-        state.up = true;
-        Move();
-     });
-     canvas.Input.keyUp(Input.Up, function(e) {
-        state.up = false;
-        Move();
-     });
-     //bas
-     canvas.Input.keyDown(Input.Bottom, function(e) {
-        state.down = true;
-        Move();
-     });
-     canvas.Input.keyUp(Input.Bottom, function(e) {
-        state.down = false;
-        Move();
-     });
-
-     var Move = function() {
-      var hori = 0
-      var verti = 0
-      if( state.right && state.left ) {
-        hori = 0;
-      } else if( state.right ) {
-        hori = -5;
-      } else if( state.left ) {
-        hori = 5;
-      }
-      self.scrolling.scroll_el[0].speed = hori;
-      if( state.up && state.down ) {
-        verti = 0;
-      } else if( state.up ) {
-        verti = -5;
-      } else if( state.down ) {
-        verti = 5;
-      }
-      self.joueur.y += verti;
-      if( self.joueur.y > 231 - self.joueur.img.height )
-        self.joueur.y = 231 - self.joueur.img.height;
-      if( self.joueur.y < 0 )
-        self.joueur.y = 0;
-     };
+    //déclaration des contrôles
+    initControls.bind( this )();
 
     //création de la map
     this.tiledMap = this.createElement();
@@ -106,10 +48,10 @@ canvas.Scene.new({
     //ajout du scroll sur la map
     self.scrolling.addScroll({
       element: self.tiledMap, 
-      speed: -5,
+      speed: 5,
       block: true,
       width: 4850,
-      height: 154
+      height: 231
     });
 
     self.joueur = self.createElement();
@@ -119,15 +61,38 @@ canvas.Scene.new({
     stage.append(self.tiledMap);
 
     stage.append(self.joueur);
-
-
-      
-
   },
   //Method called at each render (60 FPS)
   render: function(stage) {
+    this.move();
     this.scrolling.update();
     stage.refresh();
+  },
+  //gestion du mouvement
+  move: function() {
+    var hori = 0
+    var verti = 0
+    if( this.state.right && this.state.left ) {
+      hori = 0;
+    } else if( this.state.right ) {
+      hori = -5;
+    } else if( this.state.left ) {
+      hori = 5;
+    }
+    this.scrolling.scroll_el[0].speed = hori;
+    if( this.state.up && this.state.down ) {
+      verti = 0;
+    } else if( this.state.up ) {
+      verti = -3;
+    } else if( this.state.down ) {
+      verti = 3;
+    }
+    result = this.joueur.y + verti;
+    if( result > 231 - this.joueur.img.height )
+      result = 231 - this.joueur.img.height;
+    if( result < 0 )
+      result = 0;
+    this.joueur.y = result;
   },
   //Method called when this scene is quitted (or another scene is called)
   exit: function(stage) {
