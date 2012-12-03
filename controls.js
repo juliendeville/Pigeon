@@ -46,6 +46,7 @@ var initControls = function() {
     //bwaaaa
     canvas.Input.keyDown([Input.Space], function(e) {
       self.state.cri = true;
+
     });
     canvas.Input.keyUp(Input.Space, function(e) {
       self.state.cri = false;

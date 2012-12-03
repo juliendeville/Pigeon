@@ -28,8 +28,23 @@ canvas.Scene.new({
 
     this.state = { left: false, right: false, up: false, down: false };
 
+    //déclaration de la gestion des projectiles
+    initProjectiles.bind( this )();
+
     //déclaration des contrôles
     initControls.bind( this )();
+
+    //creation du scrolling
+    this.scrolling = canvas.Scrolling.new(this, 77, 97);
+
+    //création du joueur
+    self.joueur = self.createElement();
+    self.joueur.drawImage("player");
+    self.joueur.y = 150;
+    self.joueur.x = 150;
+
+    //ajout du joueur au scrolling
+    self.scrolling.setMainElement(self.joueur);
 
     //création de la map
     this.tiledMap = this.createElement();
@@ -43,22 +58,19 @@ canvas.Scene.new({
         layer_object = this.getLayerObject();
       
     });
-
-    this.scrolling = canvas.Scrolling.new(this, 77, 97);
+    var map = this.createElement();
+    map.append( self.tiledMap);
+    map.append( self.joueur);
 
     //ajout du scroll sur la map
     self.scrolling.addScroll({
-      element: self.tiledMap, 
-      speed: 5,
+      element: map, 
+      speed: 3,
       block: true,
       width: 4850,
       height: 231
     });
 
-    self.joueur = self.createElement();
-    self.joueur.drawImage("player");
-    self.joueur.x = 150;
-    self.scrolling.setMainElement(self.joueur);
 
     //image cri  !!!
     self.cri = self.createElement();
@@ -67,18 +79,20 @@ canvas.Scene.new({
 
     this.timelineCri= canvas.Timeline.new(this.cri);
 
-    stage.append(self.tiledMap);
+    stage.append(map);
 
     stage.append(self.cri);
-    stage.append(self.joueur);
+    //stage.append(self.joueur);
   },
   //Method called at each render (60 FPS)
   render: function(stage) {
     this.move();
-    if( this.scrolling.scroll_el[0].speed !== 0 )
-      this.scrolling.update();
+
+    this.joueur.x+=3;
+    this.scrolling.update();
+
     if( this.state.cri && this.cri.opacity == 0 ) {
-      this.cri.opacity = 1.0;
+      //this.cri.opacity = 1.0;
     /*this.timelineCri.wait( 500000)
                   .to({opacity: 1}, 100, Ease.linear)
                   .to({opacity: 0}, 500, Ease.linear).call();
@@ -113,11 +127,19 @@ canvas.Scene.new({
     if( this.state.right && this.state.left ) {
       hori = 0;
     } else if( this.state.right ) {
-      hori = -5;
+      hori = 3;
     } else if( this.state.left ) {
-      hori = 5;
+      hori = -6;
     }
-    this.scrolling.scroll_el[0].speed = hori;
+
+    result = this.joueur.x + hori;
+
+    if( result > 4850 - this.joueur.img.height )
+      result = 4850 - this.joueur.img.height;
+    if( result < 0 )
+      result = 0;
+
+    this.joueur.x = result;
   },
   //Method called when this scene is quitted (or another scene is called)
   exit: function(stage) {
