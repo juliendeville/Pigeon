@@ -13,6 +13,9 @@ canvas.Scene.new({
   name: "MyScene", // Obligatory
   materials: {
     images: {
+        rossignol: "assets/rossignol.png",
+        pie: "assets/pie.png",
+        vautour: "assets/vautour.png",
         cri: "assets/bwaa.png",
         murs: "assets/murs.png",
         player: "assets/pigeon.png"
@@ -28,6 +31,9 @@ canvas.Scene.new({
 
     this.state = { left: false, right: false, up: false, down: false };
 
+    //déclaration de la gestion des ennemis
+    initEnnemies.bind( this )();
+
     //déclaration de la gestion des projectiles
     initProjectiles.bind( this )();
 
@@ -40,7 +46,7 @@ canvas.Scene.new({
     //création du joueur
     self.joueur = self.createElement();
     self.joueur.drawImage("player");
-    self.joueur.y = 150;
+    self.joueur.y = 100;
     self.joueur.x = 150;
 
     //ajout du joueur au scrolling
@@ -56,18 +62,17 @@ canvas.Scene.new({
       var tile_w = this.getTileWidth(),
         tile_h = this.getTileHeight(),
         layer_object = this.getLayerObject();
-      
     });
-    var map = this.createElement();
-    map.append( self.tiledMap);
-    map.append( self.joueur);
+    this.map = this.createElement();
+    this.map.append( self.tiledMap);
+    this.map.append( self.joueur);
 
     //ajout du scroll sur la map
     self.scrolling.addScroll({
-      element: map, 
+      element: this.map, 
       speed: 3,
       block: true,
-      width: 4850,
+      width: 1250,
       height: 231
     });
 
@@ -79,7 +84,7 @@ canvas.Scene.new({
 
     this.timelineCri= canvas.Timeline.new(this.cri);
 
-    stage.append(map);
+    stage.append(this.map);
 
     stage.append(self.cri);
     //stage.append(self.joueur);
@@ -134,8 +139,8 @@ canvas.Scene.new({
 
     result = this.joueur.x + hori;
 
-    if( result > 4850 - this.joueur.img.height )
-      result = 4850 - this.joueur.img.height;
+    if( result > 1250 - this.joueur.img.height )
+      result = 1250 - this.joueur.img.height;
     if( result < 0 )
       result = 0;
 
