@@ -13,6 +13,8 @@ canvas.Scene.new({
   name: "MyScene", // Obligatory
   materials: {
     images: {
+        bulletp: "assets/bulletp.png",
+        bullet: "assets/bullet.png",
         rossignol: "assets/rossignol.png",
         pie: "assets/pie.png",
         vautour: "assets/vautour.png",

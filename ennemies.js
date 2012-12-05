@@ -3,6 +3,7 @@ var initEnnemies = function() {
 
 
   self.Ennemies = {
+    ennemies : [],
     canard : {
       texture: "canard", 
       hitbox: {
@@ -152,7 +153,6 @@ var initEnnemies = function() {
             this.y = this.originY;
           }
 
-
           // ( π/2 + pourcentage * 2π ) % 2π
           // on ajoute π/2 car on commence le mouvement en haut(voir le cercle en radian)
           // le pourcentage d'avancement x 2π permet définir l'angle en radian
@@ -192,6 +192,9 @@ var initEnnemies = function() {
       //donner à l'ennemi son mouvement lors du render()
       ennemi.addLoopListener(self.Ennemies[foe].move.bind( ennemi ));
       self.map.append( ennemi );
+
+      self.ennemies.push( ennemi );
+
       return ennemi;
     }
   };
