@@ -8,4 +8,72 @@
    eJydz9sKgDAIBmCrddhqtVbv/6z9gYKYQXTxYR4aWoiowM7RqqbXQAsBeqUzue17vszIXFDzXpT99K7V3KJ7A4yQjMmp/WXfikznifePzh12/0rPO2ZYIMPKMavabVPf4nRqt4Pll7e8fyUPKl7FqgZX
   </data>
  </layer>
+ <objectgroup color="#a40005" name="rossignols" width="50" height="3">
+  <object type="rossignol" x="1475" y="70"/>
+  <object type="rossignol" x="1439" y="63"/>
+  <object type="rossignol" x="1513" y="75"/>
+  <object type="rossignol" x="1582" y="84"/>
+  <object type="rossignol" x="1616" y="93"/>
+  <object type="rossignol" x="1549" y="78"/>
+  <object type="rossignol" x="1390" y="60"/>
+  <object type="rossignol" x="1935" y="146"/>
+  <object type="rossignol" x="1999" y="97"/>
+  <object type="rossignol" x="2025" y="78"/>
+  <object type="rossignol" x="2085" y="47" width="21" height="19"/>
+  <object type="rossignol" x="1911" y="168"/>
+  <object type="rossignol" x="2053" y="62"/>
+  <object type="rossignol" x="1964" y="125"/>
+  <object type="rossignol" x="4762" y="57"/>
+  <object type="rossignol" x="4834" y="49"/>
+  <object type="rossignol" x="4762" y="28" height="1"/>
+  <object type="rossignol" x="4759" y="182"/>
+  <object type="rossignol" x="4759" y="39"/>
+  <object type="rossignol" x="4760" y="141"/>
+  <object type="rossignol" x="4833" y="149"/>
+  <object type="rossignol" x="4833" y="174"/>
+  <object type="rossignol" x="4760" y="116"/>
+  <object type="rossignol" x="4806" y="177"/>
+  <object type="rossignol" x="4836" y="70"/>
+  <object type="rossignol" x="4759" y="163"/>
+  <object type="rossignol" x="4805" y="73"/>
+  <object type="rossignol" x="4806" y="51"/>
+  <object type="rossignol" x="4804" y="130"/>
+  <object type="rossignol" x="4802" y="90"/>
+  <object type="rossignol" x="4831" y="13"/>
+  <object type="rossignol" x="4802" y="10"/>
+  <object type="rossignol" x="4835" y="88"/>
+  <object type="rossignol" x="4834" y="126"/>
+  <object type="rossignol" x="4840" y="33"/>
+  <object type="rossignol" x="4803" y="106"/>
+  <object type="rossignol" x="4758" y="88"/>
+  <object type="rossignol" x="4803" y="30"/>
+  <object type="rossignol" x="4764" y="12"/>
+  <object type="rossignol" x="4835" y="107"/>
+  <object type="rossignol" x="4801" y="154"/>
+  <object type="rossignol" x="3096" y="168"/>
+  <object type="rossignol" x="3125" y="121"/>
+  <object type="rossignol" x="3052" y="102"/>
+  <object type="rossignol" x="2939" y="63"/>
+  <object type="rossignol" x="2964" y="111"/>
+  <object type="rossignol" x="3170" y="83"/>
+  <object type="rossignol" x="3014" y="168"/>
+ </objectgroup>
+ <objectgroup color="#8b6043" name="vautours" width="50" height="3">
+  <object type="vautour" x="3477" y="177"/>
+  <object type="vautour" x="3906" y="186"/>
+  <object type="vautour" x="3572" y="179"/>
+  <object type="vautour" x="3703" y="178"/>
+  <object type="vautour" x="3644" y="176"/>
+  <object type="vautour" x="3842" y="184"/>
+  <object type="vautour" x="3764" y="182"/>
+ </objectgroup>
+ <objectgroup color="#000000" name="pies" width="50" height="3">
+  <object type="pie" x="2448" y="21"/>
+  <object type="pie" x="2501" y="23"/>
+  <object type="pie" x="2567" y="22"/>
+  <object type="pie" x="2399" y="21"/>
+  <object type="pie" x="2538" y="21"/>
+  <object type="pie" x="2640" y="22"/>
+  <object type="pie" x="2600" y="21"/>
+ </objectgroup>
 </map>
