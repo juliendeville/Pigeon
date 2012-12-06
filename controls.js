@@ -52,4 +52,10 @@ var initControls = function() {
       self.state.cri = false;
     });
 
+    //changement d'arme
+    canvas.Input.keyDown( [69], function(e) {
+      self.state.change = true;
+
+    });
+
 }
