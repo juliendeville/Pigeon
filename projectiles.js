@@ -12,6 +12,7 @@ var initProjectiles = function()
       fusil: [
         {
           texture : "bulletp",
+          cooldown: 15, 
           force: 1, 
           vitesse: 7, 
           move: function() 
@@ -24,6 +25,7 @@ var initProjectiles = function()
       [
         {
           texture : "bulletp",
+          cooldown: 20, 
           force: 1, 
           vitesse: 7, 
           move: function() 
@@ -34,6 +36,7 @@ var initProjectiles = function()
         },
         {
           texture : "bulletp",
+          cooldown: 20, 
           force: 1, 
           vitesse: 7, 
           move: function() 
@@ -47,13 +50,14 @@ var initProjectiles = function()
       [
         {
           texture : "bulletp",
+          cooldown: 25, 
           force: 1, 
-          vitesse: 4.9, 
+          vitesse: 7, 
           move: function() 
           {
-            this.rotation = -45;
+            this.rotation = -10;
             this.x += this.donnees.vitesse;
-            this.y -= this.donnees.vitesse;
+            this.y -= this.donnees.vitesse/10;
           } 
         },
         {
@@ -68,12 +72,12 @@ var initProjectiles = function()
         {
           texture : "bulletp",
           force: 1, 
-          vitesse: 4.9, 
+          vitesse: 7, 
           move: function() 
           {
-            this.rotation = 45;
+            this.rotation = 10;
             this.x += this.donnees.vitesse;
-            this.y += this.donnees.vitesse;
+            this.y += this.donnees.vitesse/10;
           } 
         }
       ],
@@ -81,6 +85,7 @@ var initProjectiles = function()
       [
         {
           texture : "bulletp",
+          cooldown: 30, 
           force: 1, 
           vitesse: 7, 
           move: function() 
