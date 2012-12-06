@@ -4,19 +4,6 @@ var initEnnemies = function() {
 
   self.Ennemies = {
     ennemies : [],
-    canard : {
-      texture: "canard", 
-      hitbox: {
-        x :0, 
-        y: 0, 
-        h:100, 
-        w: 100
-      },
-      vitesse: 2,
-      move : function(){ 
-        this.x-=1;
-      }
-    },
     rossignol : {
       texture: "rossignol", 
       hitbox: {
@@ -25,35 +12,11 @@ var initEnnemies = function() {
         h:100, 
         w: 100
       },
-      vitesse: 2,
+      vitesse: 3,
       move : function(){ 
-        this.x-=1;
-      }
-    },
-    pigeon : {
-      texture: "pigeon", 
-      hitbox: {
-        x :0, 
-        y: 0, 
-        h:100, 
-        w: 100
-      },
-      vitesse: 2,
-      move : function(){ 
-        this.x-=1;
-      }
-    },
-    dodo : {
-      texture: "dodo", 
-      hitbox: {
-        x :0, 
-        y: 0, 
-        h:100, 
-        w: 100
-      },
-      vitesse: 2,
-      move : function(){ 
-        this.x-=1;
+        if (!this._visible) return;
+        this.x += 2;
+        this.x -= this.donnees.vitesse;
       }
     },
     pie : {
@@ -64,8 +27,10 @@ var initEnnemies = function() {
         h: 100, 
         w: 100
       },
-      vitesse: 2,
+      vitesse: 3,
       move : function(){ 
+        if (!this._visible) return;
+        this.x += 2;
         //définition des constantes
         if( this.originY == undefined )
           this.originY = this.y;
@@ -77,7 +42,7 @@ var initEnnemies = function() {
           this.count++;
 
         //mouvement
-        if( this.count >= 300 ){ //mouvement de cercle
+        if( this.count >= 100 ){ //mouvement de cercle
           if( this.rayon == undefined )
             this.rayon = 0.3 * 231; //@TODO vraie recherche de valeur au lieu de 231
           if( this.etapes == undefined )
@@ -120,8 +85,11 @@ var initEnnemies = function() {
         h:100, 
         w: 100
       },
-      vitesse: 2,
+      vitesse: 3,
       move : function(){
+        if (!this._visible) return;
+        
+        this.x += 2;
 
         //définition des constantes
         if( this.originY == undefined )
@@ -134,7 +102,7 @@ var initEnnemies = function() {
           this.count++;
 
         //mouvement
-        if( this.count >= 300 ){ //mouvement de cercle
+        if( this.count >= 100 ){ //mouvement de cercle
           if( this.rayon == undefined )
             this.rayon = 0.3 * 231; //@TODO vraie recherche de valeur au lieu de 231
           if( this.etapes == undefined )
@@ -177,6 +145,7 @@ var initEnnemies = function() {
       },
       vitesse: 2,
       move : function(){ 
+        if (!this._visible) return;
         this.x-=1;
       }
     }, //oui je sais !
@@ -193,7 +162,7 @@ var initEnnemies = function() {
       ennemi.addLoopListener(self.Ennemies[foe].move.bind( ennemi ));
       self.map.append( ennemi );
 
-      self.ennemies.push( ennemi );
+      self.Ennemies.ennemies.push( ennemi );
 
       return ennemi;
     }
