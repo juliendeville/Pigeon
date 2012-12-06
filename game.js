@@ -43,23 +43,59 @@ canvas.Scene.new({
     initControls.bind( this )();
 
     //creation du scrolling
-    this.scrolling = canvas.Scrolling.new(this, 77, 97);
+    this.scrolling = canvas.Scrolling.new(this, 77, 1455);//en mettant 15 carrés(97*15) ça passe le check pour avancer(qui ne se déclanche pas si on est pas assez à droite), mais ça affiche cette distance à la fin.
 
     //création du joueur
     self.joueur = self.createElement();
     self.joueur.drawImage("player");
     self.joueur.y = 100;
     self.joueur.x = 150;
+    self.joueur.move = function() {
+      var self = this;
+
+      var hori = 0
+      var verti = 0
+      if( self.state.up && self.state.down ) {
+        verti = 0;
+      } else if( self.state.up ) {
+        verti = -3;
+      } else if( self.state.down ) {
+        verti = 3;
+      }
+      var result = self.joueur.y + verti;
+      if( result > 231 - self.joueur.img.height )
+        result = 231 - self.joueur.img.height;
+      if( result < 0 )
+        result = 0;
+      self.joueur.y = result;
+
+      if( self.state.right && self.state.left ) {
+        hori = 0;
+      } else if( self.state.right ) {
+        hori = 6;
+      } else if( self.state.left ) {
+        hori = -3;
+      }
+
+      result = self.joueur.x + hori;
+
+      if( result > self.maxvisible - canvas.el_canvas[0].width * 3 / 4 )
+        result = self.maxvisible - canvas.el_canvas[0].width * 3 / 4;
+      if( result < self.maxvisible - canvas.el_canvas[0].width + 25 )
+        result = self.maxvisible - canvas.el_canvas[0].width + 25 ;
+
+      self.joueur.x = result;
+    };
 
     //ajout du joueur au scrolling
     self.scrolling.setMainElement(self.joueur);
 
     //création de la map
     this.tiledMap = this.createElement();
-    var tiled = canvas.Tiled.new();
+    self.tiled = canvas.Tiled.new();
     //chargement de la map
-    tiled.load(this, this.tiledMap, "map.json");
-    tiled.ready(function() {
+    self.tiled.load(this, this.tiledMap, "map.json");
+    self.tiled.ready(function() {
       //initialisation de la map
       var tile_w = this.getTileWidth(),
         tile_h = this.getTileHeight(),
@@ -74,79 +110,63 @@ canvas.Scene.new({
       element: this.map, 
       speed: 3,
       block: true,
-      width: 1250,
+      width: 4850,
       height: 231
     });
 
-
-    //image cri  !!!
-    self.cri = self.createElement();
-    self.cri.drawImage("cri");
-    self.cri.opacity = 0;
-
-    this.timelineCri= canvas.Timeline.new(this.cri);
+    self.armes = [ "fusil", "mitrailleuse", "gatling", "tetechercheuse" ];
+    self.arme = 0;
+    self.waitedForFire = 0;
 
     stage.append(this.map);
-
-    stage.append(self.cri);
-    //stage.append(self.joueur);
   },
   //Method called at each render (60 FPS)
   render: function(stage) {
-    this.move();
+    var self = this;
+    self.maxvisible = canvas.el_canvas[0].width - self.map.x;
 
-    this.joueur.x+=3;
-    this.scrolling.update();
+    //mouvement pigeon
+    self.joueur.move.bind( this )();
 
-    if( this.state.cri && this.cri.opacity == 0 ) {
-      //this.cri.opacity = 1.0;
-    /*this.timelineCri.wait( 500000)
-                  .to({opacity: 1}, 100, Ease.linear)
-                  .to({opacity: 0}, 500, Ease.linear).call();
-                  */
-      //this.timelineCri.call();
-
+    //changement d'arme
+    if( self.state.change ) {
+      self.state.change = false;
+      self.arme = ( self.arme + 1 ) % self.armes.length;
     }
+
+    //tir !
+    if( self.state.cri && self.waitedForFire >= self.Projectiles.playerProjectile[ self.armes[self.arme] ][0].cooldown ) {
+      self.Projectiles.playerFire( self.joueur, self.armes[ self.arme ] );
+      self.waitedForFire = 0;
+    } else {
+      self.waitedForFire++;
+    }
+
+    self.scrolling.update();
+
+    //apparition des ennemis sur la map
+    self.tiled.layers.forEach( function(espece) 
+      { 
+        if( espece.type != "objectgroup" )
+          return;
+        espece.objects.forEach( function(ennemi) 
+          {
+            if( ennemi.apparu ){
+              if( ennemi.objet._visible && ennemi.x + ennemi.objet.img.width < -self.map.x ){
+                ennemi.objet.hide();
+              }
+              return;
+            }
+            if( ennemi.x > self.maxvisible )
+              return;
+            ennemi.objet = self.Ennemies.addFoe(ennemi.type, ennemi.x, ennemi.y);
+            ennemi.apparu = true;
+          } 
+        );
+      }
+    )
+
     stage.refresh();
-  },
-  //gestion du mouvement
-  move: function() {
-    var hori = 0
-    var verti = 0
-    if( this.state.up && this.state.down ) {
-      verti = 0;
-    } else if( this.state.up ) {
-      verti = -3;
-    } else if( this.state.down ) {
-      verti = 3;
-    }
-    var result = this.joueur.y + verti;
-    if( result > 231 - this.joueur.img.height )
-      result = 231 - this.joueur.img.height;
-    if( result < 0 )
-      result = 0;
-    this.joueur.y = result;
-
-    //positionnement cri
-    this.cri.y = result-55;
-    this.cri.x = this.joueur.x + 100;
-
-    if( this.state.right && this.state.left ) {
-      hori = 0;
-    } else if( this.state.right ) {
-      hori = 3;
-    } else if( this.state.left ) {
-      hori = -6;
-    }
-
-    result = this.joueur.x + hori;
-
-    if( result > 1250 - this.joueur.img.height )
-      result = 1250 - this.joueur.img.height;
-    if( result < 0 )
-      result = 0;
-
-    this.joueur.x = result;
   },
   //Method called when this scene is quitted (or another scene is called)
   exit: function(stage) {
