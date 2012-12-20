@@ -31,10 +31,10 @@ canvas.Scene.new({
   ready: function(stage) {
     var self = this;
 
-    this.state = { left: false, right: false, up: false, down: false };
 
     //déclaration de la gestion des ennemis
-    initEnnemies.bind( this )();
+    initEnnemies.bind(this)();
+    initPlayer.bind(this)();
 
     //déclaration de la gestion des projectiles
     initProjectiles.bind( this )();
@@ -46,46 +46,7 @@ canvas.Scene.new({
     this.scrolling = canvas.Scrolling.new(this, 77, 1455);//en mettant 15 carrés(97*15) ça passe le check pour avancer(qui ne se déclanche pas si on est pas assez à droite), mais ça affiche cette distance à la fin.
 
     //création du joueur
-    self.joueur = self.createElement();
-    self.joueur.drawImage("player");
-    self.joueur.y = 100;
-    self.joueur.x = 150;
-    self.joueur.move = function() {
-      var self = this;
-
-      var hori = 0
-      var verti = 0
-      if( self.state.up && self.state.down ) {
-        verti = 0;
-      } else if( self.state.up ) {
-        verti = -3;
-      } else if( self.state.down ) {
-        verti = 3;
-      }
-      var result = self.joueur.y + verti;
-      if( result > 231 - self.joueur.img.height )
-        result = 231 - self.joueur.img.height;
-      if( result < 0 )
-        result = 0;
-      self.joueur.y = result;
-
-      if( self.state.right && self.state.left ) {
-        hori = 0;
-      } else if( self.state.right ) {
-        hori = 6;
-      } else if( self.state.left ) {
-        hori = -3;
-      }
-
-      result = self.joueur.x + hori;
-
-      if( result > self.maxvisible - canvas.el_canvas[0].width * 3 / 4 )
-        result = self.maxvisible - canvas.el_canvas[0].width * 3 / 4;
-      if( result < self.maxvisible - canvas.el_canvas[0].width + 25 )
-        result = self.maxvisible - canvas.el_canvas[0].width + 25 ;
-
-      self.joueur.x = result;
-    };
+    self.joueur = self.Player.addPlayer( 100, 150);
 
     //ajout du joueur au scrolling
     self.scrolling.setMainElement(self.joueur);
@@ -125,17 +86,15 @@ canvas.Scene.new({
     var self = this;
     self.maxvisible = canvas.el_canvas[0].width - self.map.x;
 
-    //mouvement pigeon
-    self.joueur.move.bind( this )();
 
     //changement d'arme
-    if( self.state.change ) {
-      self.state.change = false;
+    if( self.joueur.state.change ) {
+      self.joueur.state.change = false;
       self.arme = ( self.arme + 1 ) % self.armes.length;
     }
 
     //tir !
-    if( self.state.cri && self.waitedForFire >= self.Projectiles.playerProjectile[ self.armes[self.arme] ][0].cooldown ) {
+    if( self.joueur.state.cri && self.waitedForFire >= self.Projectiles.playerProjectile[ self.armes[self.arme] ][0].cooldown ) {
       self.Projectiles.playerFire( self.joueur, self.armes[ self.arme ] );
       self.waitedForFire = 0;
     } else {
