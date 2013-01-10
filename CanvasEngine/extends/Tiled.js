@@ -61,13 +61,22 @@ Class.create("Tiled", {
 			self.height = data.height;
 			self.tilesets = data.tilesets;
 			self.layers = data.layers;
-			var props = self.tilesets[0].tileproperties,
-				new_props = {};
-			if (props) {
-				for (var key in props) {
-					new_props[+key+1] = props[key];
+			self.tilesetsIndexed = [];
+			for (var i=0 ; i < self.tilesets.length ; i++) {
+				var props = self.tilesets[i].tileproperties,
+					new_props = {};
+				if (props) {
+					for (var key in props) {
+						new_props[+key+1] = props[key];
+					}
+					self.tilesets[i].tileproperties = new_props;
 				}
-				self.tilesets[0].tileproperties = new_props;
+				self.tilesetsIndexed[self.tilesets[i].firstgid] = self.tilesets[i];
+			}
+			var _id, length = self.tilesetsIndexed.length + (Math.round(self.tilesets[self.tilesets.length-1].imagewidth / self.tile_h) * (Math.round(self.tilesets[self.tilesets.length-1].imagewidth / self.tile_w)));
+			for (var m=1; m < length; m++) {
+				_id = self.tilesetsIndexed[m] ? m : _id;
+				self.tilesetsIndexed[m] = self.tilesetsIndexed[_id];
 			}
 			self._draw();
 		});
@@ -80,16 +89,15 @@ Class.create("Tiled", {
 		for (var i=0 ; i < this.layers.length ; i++) {
 			id = 0;
 			this.el_layers[i] = this.scene.createElement();
-			tileset = this.tilesets[0];
 			if (this.layers[i].data) {
 				for (var k=0 ; k < this.layers[i].height ; k++) {
 					for (var j=0 ; j < this.layers[i].width ; j++) {
 						_tile = this.scene.createElement();
-						
 						_id = this.layers[i].data[id];
 						if (_id != 0) {
-							_id--;
-							y = this.tile_h * parseInt(_id / (Math.round(tileset.imagewidth / this.tile_h)));
+							tileset = this.tilesetsIndexed[_id];
+							_id -= tileset.firstgid;
+							y = this.tile_h * Math.floor(_id / (Math.round(tileset.imagewidth / this.tile_h)));
 							x = this.tile_w * (_id % Math.round(tileset.imagewidth / this.tile_w));
 							
 							_tile.drawImage(tileset.name, x, y, this.tile_w, this.tile_h, j * this.tile_w, k * this.tile_h, this.tile_w, this.tile_h);
@@ -225,55 +233,55 @@ Class.create("Tiled", {
 });
 
 /**
-	@doc tiled
-	@class Tiled Tiled is a general purpose tile map editor. It's built to be easy to use, yet flexible enough to work with varying game engines, whether your game is an RPG, platformer or Breakout clone. Tiled is free software and written in C++, using the Qt application framework.
-	
-	http://www.mapeditor.org
-	
-	 <p>Consider adding inserting Tiled.js</p>
-	 <code>
-		 <script src="extends/Tiled.js"></script>
-		 <script>
-		   var canvas = CE.defines("canvas_id").
-			extend(Tiled).
-			ready(function() {
-				
-			});
-		 </script>
-	 </code>
-	
-	@param {CanvasEngine.Scene} scene
-	@param {CanvasEngine.Element} el The layers are displayed on this element
-	@param {String} url Path to the JSON file of Tiled Map Editor
-	@example
-	<code>
+@doc tiled
+@class Tiled Tiled is a general purpose tile map editor. It's built to be easy to use, yet flexible enough to work with varying game engines, whether your game is an RPG, platformer or Breakout clone. Tiled is free software and written in C++, using the Qt application framework.
+
+http://www.mapeditor.org
+
+Consider adding inserting Tiled.js
+
+	 <script src="extends/Tiled.js"></script>
+	 <script>
+	   var canvas = CE.defines("canvas_id").
+		extend(Tiled).
+		ready(function() {
+			
+		});
+	 </script>
+
+
+@param {CanvasEngine.Scene} scene
+@param {CanvasEngine.Element} el The layers are displayed on this element
+@param {String} url Path to the JSON file of Tiled Map Editor
+@example
+
 	var canvas = CE.defines("canvas_id").
 		extend(Tiled).
 		ready(function() {
 			canvas.Scene.call("MyScene");
 		});
-			
-		canvas.Scene.new({
-			name: "MyScene",
-			materials: {
-				images: {
-					mytileset: "path/to/tileset.png"
-				}
-			},
-			ready: function(stage) {
-				 var el = this.createElement();
-				 var tiled = canvas.Tiled.new();
-				tiled.load(this, el, "map/map.json");
-				tiled.ready(function() {
-					 var tile_w = this.getTileWidth(),
-						 tile_h = this.getTileHeight(),
-						 layer_object = this.getLayerObject();
-					 stage.append(el);
-				});
-				
+		
+	canvas.Scene.new({
+		name: "MyScene",
+		materials: {
+			images: {
+				mytileset: "path/to/tileset.png"
 			}
-		});
-	</code>
+		},
+		ready: function(stage) {
+			 var el = this.createElement();
+			 var tiled = canvas.Tiled.new();
+			tiled.load(this, el, "map/map.json");
+			tiled.ready(function() {
+				 var tile_w = this.getTileWidth(),
+					 tile_h = this.getTileHeight(),
+					 layer_object = this.getLayerObject();
+				 stage.append(el);
+			});
+			
+		}
+	});
+
 */
 var Tiled = {
 	Tiled: {
